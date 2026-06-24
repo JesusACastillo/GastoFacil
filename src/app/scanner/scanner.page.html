@@ -1,0 +1,160 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title color="primary"><strong>Escanear Ticket</strong></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (!imagenBase64) {
+  <div class="scanner-welcome-container">
+    <div class="welcome-icon-wrapper">
+      <ion-icon name="sparkles-outline" class="sparkles-bg-icon"></ion-icon>
+      <ion-icon name="receipt-outline" class="receipt-main-icon"></ion-icon>
+    </div>
+
+    <h2>Registra tus gastos con IA</h2>
+    <p>Toma una foto de tu ticket de compra y nuestra Inteligencia Artificial extraerá automáticamente el comercio, la
+      fecha, el total y lo clasificará por ti.</p>
+
+    <div class="action-buttons-group">
+      <ion-button (click)="tomarFoto()" expand="block" shape="round" color="primary" class="welcome-btn">
+        <ion-icon slot="start" name="camera-outline"></ion-icon>
+        Usar Cámara
+      </ion-button>
+
+      <ion-button (click)="seleccionarDeGaleria()" expand="block" shape="round" fill="outline" color="primary"
+        class="welcome-btn outline-btn">
+        <ion-icon slot="start" name="image-outline"></ion-icon>
+        Galería de Fotos
+      </ion-button>
+    </div>
+  </div>
+  }
+
+  @if (imagenBase64) {
+  <div class="scanner-workspace animate__fadeIn">
+
+    <div class="receipt-preview-container" [class.scanning]="cargando">
+      <img [src]="'data:image/jpeg;base64,' + imagenBase64" alt="Ticket Capturado" class="receipt-image" />
+
+      @if (cargando) {
+      <div class="scan-laser-line"></div>
+      <div class="scan-overlay"></div>
+      }
+
+      @if (!cargando && !ticketProcesado) {
+      <button title="Eliminar Foto" class="delete-photo-btn" (click)="reiniciar()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </button>
+      }
+    </div>
+
+    @if (mensajeError) {
+    <div class="error-alert">
+      <ion-icon name="close-circle-outline" color="danger"></ion-icon>
+      <div class="error-text">
+        <h4>Error de Procesamiento</h4>
+        <p>{{ mensajeError }}</p>
+      </div>
+    </div>
+    }
+
+    @if (!cargando && !ticketProcesado) {
+    <div class="action-trigger-container">
+      <ion-button (click)="procesarTicket()" expand="block" shape="round" color="primary" class="process-btn">
+        <ion-icon slot="start" name="sparkles-outline"></ion-icon>
+        Escanear Ticket con IA
+      </ion-button>
+
+      <ion-button (click)="reiniciar()" expand="block" shape="round" fill="clear" color="medium">
+        Cancelar
+      </ion-button>
+    </div>
+    }
+
+    @if (cargando) {
+    <div class="loading-container">
+      <ion-spinner name="crescent" color="primary"></ion-spinner>
+      <h4>Analizando ticket...</h4>
+      <p>La IA está leyendo los datos de tu compra. Esto tomará solo unos segundos.</p>
+    </div>
+    }
+
+    @if (ticketProcesado && !cargando) {
+    <div class="digital-receipt-card animate__slideInUp">
+      <div class="receipt-header">
+        <div class="receipt-decorations">
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+        <h3>Gasto Detectado</h3>
+        <p>Verifica y edita la información antes de guardar</p>
+      </div>
+
+      <div class="receipt-body">
+        <div class="receipt-field">
+          <ion-label class="field-label">
+            <ion-icon name="create-outline"></ion-icon> Concepto / Comercio
+          </ion-label>
+          <ion-input [(ngModel)]="conceptoDetectado" placeholder="Establecimiento o descripción"
+            class="receipt-input"></ion-input>
+        </div>
+
+        <div class="receipt-field">
+          <ion-label class="field-label">
+            <ion-icon name="cash-outline"></ion-icon> Monto Total
+          </ion-label>
+          <div class="amount-input-wrapper">
+            <span class="currency-prefix">$</span>
+            <ion-input type="number" [(ngModel)]="montoDetectado" placeholder="0.00"
+              class="receipt-input amount-input"></ion-input>
+          </div>
+        </div>
+
+        <div class="receipt-row">
+          <div class="receipt-field half-width">
+            <ion-label class="field-label">
+              <ion-icon name="calendar-outline"></ion-icon> Fecha
+            </ion-label>
+            <ion-input type="date" [(ngModel)]="fechaDetectada" class="receipt-input date-input"></ion-input>
+          </div>
+
+          <div class="receipt-field half-width">
+            <ion-label class="field-label">
+              <ion-icon name="pricetag-outline"></ion-icon> Categoría
+            </ion-label>
+            <ion-item lines="none" class="receipt-select-item">
+              <ion-select [(ngModel)]="categoriaDetectada" interface="popover" placeholder="Categoría"
+                class="receipt-select">
+                @for (cat of categorias; track cat) {
+                <ion-select-option [value]="cat.id">{{ cat.nombre }}</ion-select-option>
+                }
+              </ion-select>
+            </ion-item>
+          </div>
+        </div>
+      </div>
+
+      <div class="receipt-footer-cut"></div>
+
+      <div class="receipt-actions">
+        <ion-button (click)="guardarGasto()" expand="block" shape="round" color="primary" class="save-btn">
+          <ion-icon slot="start" name="save-outline"></ion-icon>
+          Guardar Gasto
+        </ion-button>
+
+        <ion-button (click)="reiniciar()" expand="block" shape="round" fill="outline" color="primary" class="retry-btn">
+          <ion-icon slot="start" name="refresh-outline"></ion-icon>
+          Escanear Otro
+        </ion-button>
+      </div>
+    </div>
+    }
+
+  </div>
+  }
+</ion-content>

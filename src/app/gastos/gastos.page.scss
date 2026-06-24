@@ -1,0 +1,340 @@
+/* Scoped components require higher specificity to customize */
+ion-searchbar.custom {
+    --background: transparent;
+    --color: #000000;
+    --placeholder-color: #000000;
+    --icon-color: #000000;
+    --clear-button-color: #000000;
+    --border-radius: 15px;
+    /* Sombra sutil para darle elevación */
+    
+
+    /* Fuerza la altura del componente y del contenedor interno */
+    border: solid !important;
+    border-radius: 15px !important;
+    border-width: 1.5px !important;
+    border-color: #3880ff !important;
+    min-height: 40px !important;
+    height: 50px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 8px !important;
+
+    ::ng-deep {
+        .searchbar-input-container {
+            height: 100% !important;
+        }
+
+        .searchbar-input {
+            height: 100% !important;
+        }
+    }
+}
+
+ion-searchbar.ios.custom {
+    --cancel-button-color: #000000;
+}
+
+ion-searchbar.md.custom {
+    --cancel-button-color: #000000;
+}
+
+.header-section {
+    background: #ffffff;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 4px 0;
+}
+
+.filter-group-right {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    --border-radius: 12px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    height: 38px;
+
+    ion-icon {
+        margin-right: 4px;
+        font-size: 16px;
+    }
+}
+
+.date-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 500;
+    height: 38px;
+    padding: 0 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    box-sizing: border-box;
+
+    /* Estado outline por defecto */
+    border: 1px solid var(--ion-color-primary, #3880ff);
+    color: var(--ion-color-primary, #3880ff);
+    background: transparent;
+
+    ion-icon {
+        font-size: 16px;
+        margin-right: 2px;
+    }
+
+    span {
+        line-height: 1;
+    }
+
+    /* Estado solid activo */
+    &.active {
+        background: var(--ion-color-primary, #3880ff);
+        color: #ffffff;
+        border-color: var(--ion-color-primary, #3880ff);
+    }
+
+    &:active {
+        opacity: 0.7;
+    }
+}
+
+.hidden-date-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+
+    &::-webkit-calendar-picker-indicator {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        cursor: pointer;
+    }
+}
+
+ion-content {
+    --background: #f6f8fc;
+    /* Fondo premium de tono claro gris/azul */
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-top: 10px;
+    margin-bottom: 16px;
+}
+
+.gastos-container {
+    background-color: #ffffff;
+    padding: 0 16px 16px 16px;
+}
+
+.gasto-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    border: 1.5px solid transparent;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+
+    &:active {
+        transform: scale(0.98);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    }
+
+    &.selected {
+        transform: scale(1.04);
+        /* Hace la tarjeta ligeramente más grande al estar seleccionada */
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
+        border-color: rgba(56, 128, 255, 0.25);
+        /* Bordes sutiles de color primario */
+
+        &:active {
+            transform: scale(1.01);
+        }
+
+        .gasto-actions {
+            max-width: 100px;
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+    }
+}
+
+.gasto-icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 18px;
+    flex-shrink: 0;
+
+    ion-icon {
+        font-size: 24px;
+    }
+}
+
+.gasto-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1;
+}
+
+.gasto-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.gasto-concepto {
+    font-size: 18px;
+    font-weight: 500;
+    color: #1c1c1e;
+    letter-spacing: -0.3px;
+}
+
+.gasto-monto {
+    font-size: 18px;
+    font-weight: 500;
+    color: #1c1c1e;
+    letter-spacing: -0.3px;
+}
+
+.secondary-row {
+    margin-top: 2px;
+}
+
+.gasto-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.gasto-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 8px;
+    text-transform: capitalize;
+    letter-spacing: 0.1px;
+}
+
+.gasto-fecha {
+    font-size: 13px;
+    color: #8e8e93;
+    font-weight: 400;
+}
+
+.gasto-actions {
+    display: flex;
+    gap: 8px;
+    max-width: 0;
+    opacity: 0;
+    transform: scale(0.8);
+    overflow: hidden;
+    transition: max-width 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+
+.btn-action {
+    border: none;
+    outline: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    padding: 0;
+
+    ion-icon {
+        font-size: 16px;
+    }
+
+    &:active {
+        transform: scale(0.92);
+    }
+}
+
+.btn-action.edit {
+    background-color: #e8ebeb;
+    color: #5f6368;
+
+    &:hover {
+        background-color: #dcdfe0;
+        color: #4a4a4a;
+    }
+}
+
+.btn-action.delete {
+    background-color: #faebeb;
+    color: #d93025;
+
+    &:hover {
+        background-color: #f5d3d3;
+        color: #c0392b;
+    }
+}
+
+/* Refuerza la sombra de las tarjetas y añade efecto hover */
+.gasto-card {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.10);
+    }
+}
+
+/* Estilo animado para el botón FAB de scroll a arriba */
+.scroll-to-top-fab {
+    opacity: 0;
+    transform: scale(0.6) translateY(20px);
+    transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1), transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+
+    &.visible {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        pointer-events: auto;
+    }
+}

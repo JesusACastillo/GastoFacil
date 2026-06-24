@@ -1,0 +1,45 @@
+<ion-split-pane contentId="main-content">
+  <ion-menu contentId="main-content">
+    <ion-content>
+      <div class="menu-header-bg">
+        <div class="icon-wrapper">
+          <ion-icon name="wallet"></ion-icon>
+        </div>
+        <h2>Gasto Fácil</h2>
+        <p>Controla tus finanzas</p>
+      </div>
+
+      <ion-list lines="none">
+        <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/tabs/home" routerLinkActive="selected">
+            <ion-icon aria-hidden="true" name="home" slot="start"></ion-icon>
+            <ion-label>Home</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/tabs/gastos" routerLinkActive="selected">
+            <ion-icon aria-hidden="true" name="wallet" slot="start"></ion-icon>
+            <ion-label>Gastos</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/tabs/scanner" routerLinkActive="selected">
+            <ion-icon aria-hidden="true" name="scan" slot="start"></ion-icon>
+            <ion-label>Escanear</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+
+        <ion-menu-toggle auto-hide="false">
+          <ion-item routerLink="/tabs/resumen" routerLinkActive="selected">
+            <ion-icon aria-hidden="true" name="bar-chart" slot="start"></ion-icon>
+            <ion-label>Resumen</ion-label>
+          </ion-item>
+        </ion-menu-toggle>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+
+  <ion-router-outlet id="main-content"></ion-router-outlet>
+</ion-split-pane>

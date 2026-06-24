@@ -1,0 +1,111 @@
+.input-group {
+    margin-bottom: 20px;
+
+    ion-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #4a4a5a;
+        display: block;
+        margin-bottom: 8px;
+        margin-left: 4px;
+    }
+}
+
+.custom-input {
+    --background: #f2f4f8;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    --border-radius: 24px;
+    --placeholder-color: #a5abb5;
+    --placeholder-opacity: 1;
+    font-size: 16px;
+    color: #333;
+}
+
+.outline-btn {
+    --border-color: #005ce6;
+    --color: #005ce6;
+    --border-width: 1px;
+}
+
+.error-message {
+    color: #e53935;
+    font-size: 12px;
+    margin-top: 6px;
+    margin-left: 12px;
+    display: block;
+}
+
+.custom-select-trigger {
+    background: #f2f4f8;
+    padding: 14px 16px;
+    border-radius: 24px;
+    font-size: 16px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    min-height: 48px;
+    box-sizing: border-box;
+
+    span.placeholder {
+        color: #a5abb5;
+    }
+
+    ion-icon {
+        color: #5f6368;
+        font-size: 18px;
+    }
+}
+
+::ng-deep .floating-modal {
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .icon-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 48px;
+    border-radius: 12px;
+    background: #f2f4f8;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    ion-icon {
+      font-size: 24px;
+      color: #5f6368;
+      transition: color 0.2s ease;
+    }
+
+    &.selected {
+      background: var(--ion-color-primary, #3b82f6);
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+      
+      ion-icon {
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+::ng-deep ion-modal.floating-modal {
+    --width: 90%;
+    --max-width: 400px;
+    --height: 440px;
+    --border-radius: 20px;
+    --box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.35);
+    --backdrop-opacity: 0.5;
+}
+
+::ng-deep ion-modal.floating-modal::part(content) {
+    border-radius: 20px;
+    border: 1px solid #cbd5e1;
+}

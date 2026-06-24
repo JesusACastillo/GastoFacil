@@ -1,0 +1,61 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="selector-toolbar">
+    <div class="drag-handle-wrapper">
+      <div class="drag-handle"></div>
+    </div>
+    <div class="header-content">
+      <div class="header-titles">
+        <h2 class="main-title">Sector / Categoría</h2>
+        <p class="header-subtitle">Seleccione el rubro de su gasto</p>
+      </div>
+      <ion-button fill="clear" color="medium" class="close-btn" (click)="cerrar()">
+        <ion-icon name="close-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding selector-content">
+  <div class="categories-list">
+    @if (showClearOption) {
+      <div class="category-card clear-card" 
+           [class.selected]="currentSelection === null"
+           (click)="seleccionar(null)">
+        <div class="cat-icon-wrapper" style="background-color: #f3f4f6;">
+          <ion-icon name="layers-outline" style="color: #9ca3af;"></ion-icon>
+        </div>
+        <div class="cat-info">
+          <span class="cat-name">Todas las categorías</span>
+          <span class="cat-desc">Limpiar filtro actual</span>
+        </div>
+        @if (currentSelection === null) {
+          <ion-icon name="checkmark-circle" color="primary" class="check-icon"></ion-icon>
+        }
+      </div>
+    }
+
+    @for (cat of categorias; track cat.id) {
+      <div class="category-card" 
+           [class.selected]="currentSelection === cat.id"
+           [style.border-color]="currentSelection === cat.id ? getCategoryDetails(cat).iconColor : 'transparent'"
+           (click)="seleccionar(cat.id || null)">
+        <div class="cat-icon-wrapper" [style.background-color]="getCategoryDetails(cat).bgColor">
+          <ion-icon [name]="getCategoryDetails(cat).icon" 
+                    [style.color]="getCategoryDetails(cat).iconColor"></ion-icon>
+        </div>
+        <div class="cat-info">
+          <span class="cat-name" [style.color]="currentSelection === cat.id ? getCategoryDetails(cat).iconColor : 'inherit'">{{ cat.nombre }}</span>
+        </div>
+        @if (currentSelection === cat.id) {
+          <ion-icon name="checkmark-circle" class="check-icon" [style.color]="getCategoryDetails(cat).iconColor"></ion-icon>
+        }
+      </div>
+    } @empty {
+      <div class="empty-state" style="text-align: center; padding: 32px 16px; color: #6b7280;">
+        <ion-icon name="folder-open-outline" style="font-size: 48px; color: #d1d5db; margin-bottom: 8px;"></ion-icon>
+        <p style="margin: 0; font-size: 16px;">No hay categorías registradas</p>
+        <p style="margin: 4px 0 0; font-size: 13px;">Las categorías que crees aparecerán aquí.</p>
+      </div>
+    }
+  </div>
+</ion-content>

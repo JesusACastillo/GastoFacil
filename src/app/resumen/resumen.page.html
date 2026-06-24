@@ -1,0 +1,130 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="resumen-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <div class="toolbar-content">
+      <div class="user-brand">
+        <ion-icon name="person-circle-outline" class="user-avatar"></ion-icon>
+        <span class="brand-text">Gasto Fácil</span>
+      </div>
+      <ion-button fill="clear" class="notification-btn">
+        <ion-icon name="notifications-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="resumen-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="resumen-container">
+    
+    <!-- Título y Subtítulo -->
+    <div class="header-titles">
+      <h1>Resumen</h1>
+      <p>Análisis de tus finanzas este mes</p>
+    </div>
+
+    <!-- Selector de Mes -->
+    <div class="month-selector">
+      <ion-button fill="clear" shape="round" class="month-btn" (click)="cambiarMes(-1)">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+      <span class="current-month">{{ getNombreMes(selectedDate()) }}</span>
+      <ion-button fill="clear" shape="round" class="month-btn" (click)="cambiarMes(1)">
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Tarjeta Azul (Total Acumulado) -->
+    <div class="total-card">
+      <span class="card-subtitle">TOTAL ACUMULADO</span>
+      <h2 class="card-title">{{ formatMonto(totalMes()) }}</h2>
+      <div class="trend-badge">
+        <ion-icon name="trending-up-outline"></ion-icon>
+        <span>{{ trendPercent() }}% más que el mes pasado</span>
+      </div>
+    </div>
+
+    <!-- Gráfica de Pastel (Dona) -->
+    <div class="chart-card">
+      <svg width="100%" height="100%" viewBox="0 0 42 42" class="donut">
+        <!-- Círculo de fondo -->
+        <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="#fff"></circle>
+        <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f3f4f6" stroke-width="6"></circle>
+        
+        <!-- Segmentos dinámicos -->
+        @for (seg of donutSegments(); track seg.id) {
+          <circle class="donut-segment" 
+                  cx="21" cy="21" r="15.91549430918954" 
+                  fill="transparent" 
+                  [attr.stroke]="seg.color" 
+                  stroke-width="6" 
+                  [attr.stroke-dasharray]="seg.dasharray" 
+                  [attr.stroke-dashoffset]="seg.dashoffset">
+          </circle>
+        }
+        
+        <!-- Texto en el centro -->
+        <g class="chart-text">
+          <text x="50%" y="45%" class="chart-label">Gastos</text>
+          <text x="50%" y="60%" class="chart-value">100%</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Tarjeta Verde (Top Categoría) -->
+    @if (topCategory()) {
+      <div class="top-category-card">
+        <div class="top-cat-icon">
+          <ion-icon [name]="topCategory().icon"></ion-icon>
+        </div>
+        <p class="top-cat-label">Categoría con más gastos</p>
+        <p class="top-cat-name">{{ topCategory().nombre }} ({{ (topCategory().porcentaje).toFixed(0) }}%)</p>
+        
+        <div class="progress-bar-container">
+          <div class="progress-fill" [style.width]="topCategory().porcentaje + '%'"></div>
+        </div>
+      </div>
+    }
+
+    <!-- Lista de Desglose -->
+    <div class="desglose-section">
+      <h3 class="section-title">DESGLOSE POR CATEGORÍA</h3>
+      
+      <div class="desglose-list">
+        @for (cat of desgloseCategorias(); track cat.id) {
+          <div class="desglose-item">
+            <div class="item-icon" [style.background-color]="cat.bgColor">
+              <ion-icon [name]="cat.icon" [style.color]="cat.color"></ion-icon>
+            </div>
+            <div class="item-info">
+              <span class="item-name">{{ cat.nombre }}</span>
+              <span class="item-percent">{{ (cat.porcentaje).toFixed(0) }}% del total</span>
+            </div>
+            <span class="item-amount">{{ formatMonto(cat.total) }}</span>
+          </div>
+        } @empty {
+          <p class="empty-text">No hay gastos para mostrar este mes.</p>
+        }
+      </div>
+    </div>
+
+    <!-- Tarjeta de Tip (Buen camino) -->
+    <div class="tip-card">
+      <div class="tip-content">
+        <h4>¡Vas por buen camino!</h4>
+        <p>Has ahorrado un 12% comparado con la semana anterior. Mantén el enfoque en tu categoría de {{ topCategory()?.nombre || 'gastos' }}.</p>
+      </div>
+      <div class="tip-image">
+        <!-- Placeholder para la imagen pequeña como en el mockup -->
+        <div class="placeholder-img">
+          <ion-icon name="trophy-outline"></ion-icon>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ion-content>

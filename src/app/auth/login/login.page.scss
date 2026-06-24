@@ -1,0 +1,135 @@
+.light-theme {
+  --background: #f9fafb;
+  --color: #1f2937;
+}
+
+ion-toolbar {
+  --background: transparent;
+  --color: #1f2937;
+}
+
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 85vh;
+  padding: 20px;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 40px;
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+
+    .logo-icon {
+      font-size: 28px;
+      color: #1652f0; /* Vibrant blue from Figma */
+    }
+
+    .logo-text {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1652f0;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  .auth-title {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: #111827;
+    letter-spacing: -0.5px;
+  }
+
+  .auth-subtitle {
+    font-size: 15px;
+    color: #6b7280;
+    margin: 0;
+    line-height: 1.5;
+  }
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 5px 15px;
+    transition: all 0.2s ease;
+
+    &:focus-within {
+      background: #ffffff;
+      border-color: #1652f0;
+      box-shadow: 0 0 0 3px rgba(22, 82, 240, 0.1);
+    }
+
+    .input-icon {
+      font-size: 20px;
+      color: #9ca3af;
+      margin-right: 12px;
+    }
+
+    .custom-input {
+      --padding-start: 0;
+      --color: #1f2937;
+      --placeholder-color: #9ca3af;
+      font-size: 15px;
+      flex: 1;
+    }
+  }
+
+  .submit-btn {
+    margin-top: 12px;
+    --background: #1652f0;
+    --background-hover: #0b45d9;
+    --border-radius: 12px;
+    --box-shadow: 0 4px 12px rgba(22, 82, 240, 0.2);
+    --color: white;
+    font-weight: 600;
+    font-size: 16px;
+    height: 52px;
+    text-transform: none;
+    letter-spacing: 0;
+    transition: transform 0.1s ease;
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+}
+
+.toggle-section {
+  text-align: center;
+  margin-top: 24px;
+
+  .toggle-text {
+    color: #6b7280;
+    font-size: 14px;
+  }
+
+  .toggle-btn {
+    --color: #1652f0;
+    font-weight: 600;
+    margin-left: 4px;
+    --padding-start: 4px;
+    --padding-end: 4px;
+    font-size: 14px;
+    text-transform: none;
+  }
+}

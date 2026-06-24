@@ -1,0 +1,73 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar color="transparent">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding light-theme">
+  <div class="auth-container">
+    <div class="header-section">
+      <div class="logo-container">
+        <ion-icon name="cash-outline" class="logo-icon"></ion-icon>
+        <span class="logo-text">Gasto Fácil</span>
+      </div>
+      <h1 class="auth-title">{{ isLogin() ? 'Iniciar sesión' : 'Crear cuenta' }}</h1>
+      <p class="auth-subtitle">
+        {{ isLogin() ? 'Ingresa para sincronizar tus gastos' : 'Regístrate para respaldar tu información' }}
+      </p>
+    </div>
+
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="input-group" *ngIf="!isLogin()">
+        <ion-icon name="person-outline" class="input-icon"></ion-icon>
+        <ion-input
+          type="text"
+          formControlName="nombre"
+          placeholder="Tu Nombre"
+          class="custom-input"
+        ></ion-input>
+      </div>
+
+      <div class="input-group">
+        <ion-icon name="mail-outline" class="input-icon"></ion-icon>
+        <ion-input
+          type="email"
+          formControlName="email"
+          placeholder="Correo Electrónico"
+          class="custom-input"
+        ></ion-input>
+      </div>
+
+      <div class="input-group">
+        <ion-icon name="lock-closed-outline" class="input-icon"></ion-icon>
+        <ion-input
+          type="password"
+          formControlName="password"
+          placeholder="Contraseña"
+          class="custom-input"
+        ></ion-input>
+      </div>
+
+      <ion-button
+        expand="block"
+        type="submit"
+        class="submit-btn"
+        [disabled]="authForm.invalid || isLoading()"
+      >
+        <ion-spinner *ngIf="isLoading()" name="crescent"></ion-spinner>
+        <span *ngIf="!isLoading()">{{ isLogin() ? 'Iniciar Sesión' : 'Registrarse' }}</span>
+      </ion-button>
+    </form>
+
+    <div class="toggle-section">
+      <ion-text class="toggle-text">
+        {{ isLogin() ? '¿No tienes cuenta?' : '¿Ya tienes una cuenta?' }}
+      </ion-text>
+      <ion-button fill="clear" (click)="toggleMode()" class="toggle-btn">
+        {{ isLogin() ? 'Regístrate aquí' : 'Inicia Sesión' }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

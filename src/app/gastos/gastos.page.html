@@ -1,0 +1,97 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" [scrollEvents]="true" (ionScroll)="onScroll($event)">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="header-section">
+    <h1>Mis Gastos</h1>
+    <ion-searchbar placeholder="Buscar" class="custom" showCancelButton="focus" animated="true"
+      (ionInput)="handleInput($event)"></ion-searchbar>
+
+    <div class="filter-container">
+      <div class="date-btn" [class.active]="fechaFiltro()">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ fechaFiltro() ? formatFechaSimple(fechaFiltro()) : 'Fecha' }}</span>
+        <input title="Fecha" type="date" [value]="fechaFiltro() || ''" (change)="onDateSelected($event)"
+          class="hidden-date-input">
+      </div>
+
+      <div class="filter-group-right">
+        <ion-button [fill]="!categoriaFiltro() && !fechaFiltro() ? 'solid' : 'outline'" color="primary"
+          class="filter-btn" (click)="limpiarFiltros()">
+          Todos
+        </ion-button>
+        <ion-button [fill]="categoriaFiltro() ? 'solid' : 'outline'" color="primary" class="filter-btn"
+          (click)="seleccionarCategoria()"> {{ mostrarNombreCategoriaFiltro() }}
+        </ion-button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="gastos-container">
+    @for (gasto of results(); track $index) {
+    <div class="gasto-card" [class.selected]="selectedGastoId() === gasto.id" (click)="toggleSeleccion(gasto)">
+      <!-- Contenedor del Icono con color de categoría -->
+      <div class="gasto-icon-container" [style.background-color]="getCategoryDetails(gasto.categoria).bgColor">
+        <ion-icon [name]="getCategoryDetails(gasto.categoria).icon"
+          [style.color]="getCategoryDetails(gasto.categoria).iconColor">
+        </ion-icon>
+      </div>
+
+      <!-- Información del Gasto -->
+      <div class="gasto-content">
+        <!-- Fila 1: Concepto y Monto -->
+        <div class="gasto-row">
+          <span class="gasto-concepto">{{ gasto.concepto }}</span>
+          <span class="gasto-monto">{{ formatMonto(gasto.monto) }}</span>
+        </div>
+
+        <!-- Fila 2: Categoría, Fecha y Botones de acción -->
+        <div class="gasto-row secondary-row">
+          <div class="gasto-meta">
+            <span class="gasto-badge" [style.background-color]="getCategoryDetails(gasto.categoria).badgeBg"
+              [style.color]="getCategoryDetails(gasto.categoria).badgeColor">
+              {{ gasto.categoriaNombre || gasto.categoria }}
+            </span>
+            <span class="gasto-fecha">{{ formatFecha(gasto.fecha) }}</span>
+          </div>
+
+          <!-- Botones de Acción -->
+          <div class="gasto-actions">
+            <button class="btn-action edit" (click)="editGasto(gasto, $event)" title="Editar">
+              <ion-icon name="pencil-outline"></ion-icon>
+            </button>
+            <button class="btn-action delete" (click)="deleteGasto(gasto, $event)" title="Eliminar">
+              <ion-icon name="trash-outline"></ion-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button color="primary" (click)="abrirModalGasto()">
+      <ion-icon name="add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <!-- Botón de scroll hacia arriba (flecha, abajo izquierda) -->
+  <ion-fab slot="fixed" vertical="bottom" horizontal="start" class="scroll-to-top-fab"
+    [class.visible]="mostrarBotonScroll()">
+    <ion-fab-button color="dark" (click)="scrollToTop()">
+      <ion-icon name="arrow-up-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+</ion-content>

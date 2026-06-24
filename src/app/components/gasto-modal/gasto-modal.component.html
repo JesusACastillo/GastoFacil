@@ -1,0 +1,125 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelar()" color="primary">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title color="primary"><strong>{{ gasto ? 'Editar gasto' : 'Nuevo gasto' }}</strong></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form [formGroup]="gastoForm" (ngSubmit)="guardar()">
+
+    <div class="input-group">
+      <ion-label>Concepto</ion-label>
+      <ion-input formControlName="concepto" placeholder="¿En qué gastaste hoy?" class="custom-input"></ion-input>
+      @if (gastoForm.get('concepto')?.invalid && (gastoForm.get('concepto')?.dirty ||
+      gastoForm.get('concepto')?.touched)) {
+      <div class="error-message">El concepto es obligatorio.</div>
+      }
+    </div>
+
+    <div class="input-group">
+      <ion-label>Monto</ion-label>
+      <ion-input formControlName="monto" type="number" placeholder="$ 0.00" class="custom-input"></ion-input>
+      @if (gastoForm.get('monto')?.invalid && (gastoForm.get('monto')?.dirty || gastoForm.get('monto')?.touched)) {
+      @if (gastoForm.get('monto')?.errors?.['required']) {
+      <div class="error-message">El monto es obligatorio.</div>
+      }
+      @if (gastoForm.get('monto')?.errors?.['min']) {
+      <div class="error-message">El monto debe ser mayor a 0.00.</div>
+      }
+      }
+    </div>
+
+    <ion-row class="ion-no-padding">
+      <ion-col size="6" class="ion-no-padding ion-padding-end">
+        <div class="input-group">
+          <ion-label>Fecha</ion-label>
+          <ion-input formControlName="fecha" type="date" class="custom-input"></ion-input>
+          @if (gastoForm.get('fecha')?.invalid && (gastoForm.get('fecha')?.dirty || gastoForm.get('fecha')?.touched)) {
+          <div class="error-message">La fecha es obligatoria.</div>
+          }
+        </div>
+      </ion-col>
+
+      <ion-col size="6" class="ion-no-padding ion-padding-start">
+        <div class="input-group">
+          <div class="category-header">
+            <ion-label>Categoría</ion-label>
+            <ion-button fill="clear" size="small" (click)="agregarNuevaCategoria()">
+              <ion-icon name="add-circle-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </div>
+          <div class="custom-select-trigger" (click)="seleccionarCategoria()">
+            <span [class.placeholder]="!gastoForm.get('categoria')?.value">
+              {{ getCategoriaNombre(gastoForm.get('categoria')?.value) || 'Seleccionar' }}
+            </span>
+            <ion-icon name="chevron-down-outline"></ion-icon>
+          </div>
+          @if (gastoForm.get('categoria')?.invalid && (gastoForm.get('categoria')?.dirty ||
+          gastoForm.get('categoria')?.touched)) {
+          <div class="error-message">La categoría es obligatoria.</div>
+          }
+        </div>
+      </ion-col>
+    </ion-row>
+
+
+    <ion-button expand="block" shape="round" color="primary" type="submit" class="ion-margin-top"
+      [disabled]="gastoForm.invalid">
+      Guardar
+    </ion-button>
+    <ion-button expand="block" shape="round" fill="outline" (click)="cancelar()" class="ion-margin-top outline-btn">
+      Cancelar
+    </ion-button>
+
+  </form>
+
+  <ion-modal [isOpen]="isCategoriaModalOpen" (didDismiss)="cerrarCategoriaModal()" class="floating-modal">
+    <ng-template>
+      <ion-header class="ion-no-border">
+        <ion-toolbar>
+          <ion-title color="primary"><strong>Nueva Categoría</strong></ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="cerrarCategoriaModal()">Cerrar</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <form [formGroup]="categoriaForm" (ngSubmit)="guardarNuevaCategoria()">
+          
+          <div class="input-group">
+            <ion-label>Nombre</ion-label>
+            <ion-input formControlName="nombre" placeholder="Nombre de la categoría" class="custom-input"></ion-input>
+          </div>
+
+          <div class="input-group">
+            <ion-label>Color</ion-label>
+            <ion-input type="color" formControlName="color" class="custom-input" style="height: 50px; padding: 0; border: none; cursor: pointer;"></ion-input>
+          </div>
+
+          <div class="input-group">
+            <ion-label>Elige un Icono</ion-label>
+            <div class="icon-grid">
+              @for (icono of iconosDisponibles; track $index) {
+                <div class="icon-item" 
+                     [class.selected]="categoriaForm.get('icono')?.value === icono"
+                     (click)="seleccionarIcono(icono)">
+                  <ion-icon [name]="icono"></ion-icon>
+                </div>
+              }
+            </div>
+          </div>
+
+          <ion-button expand="block" shape="round" color="primary" type="submit" [disabled]="categoriaForm.invalid" class="ion-margin-top">
+            Guardar Categoría
+          </ion-button>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>

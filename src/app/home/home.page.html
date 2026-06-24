@@ -1,0 +1,158 @@
+<ion-header [translucent]="true" class="ion-no-border">
+  <ion-toolbar class="home-toolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Resumen</ion-title>
+    <ion-buttons slot="end">
+      @if (authService.isAnonymous()) {
+        <ion-button routerLink="/login" color="primary">
+          <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+          Ingresar
+        </ion-button>
+      } @else {
+        <ion-button (click)="confirmarCerrarSesion()" color="medium">
+          <ion-icon slot="icon-only" name="log-out-outline"></ion-icon>
+        </ion-button>
+      }
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-content">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="home-container">
+    
+    <!-- Selector de Mes -->
+    <div class="month-selector">
+      <ion-button fill="clear" shape="round" class="month-btn" (click)="cambiarMes(-1)">
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+      <span class="current-month">{{ getNombreMes(selectedDate()) }}</span>
+      <ion-button fill="clear" shape="round" class="month-btn" (click)="cambiarMes(1)">
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Tarjeta de Total del Mes -->
+    <div class="total-card">
+      <div class="card-header">
+        <span class="card-subtitle">Total del mes</span>
+        <ion-icon name="trending-up-outline" class="card-trend-icon"></ion-icon>
+      </div>
+      <h1 class="card-title">{{ formatMonto(totalMes()) }}</h1>
+      <div class="trend-badge-container">
+        <div class="trend-badge">
+          <ion-icon name="arrow-up-outline"></ion-icon>
+          <span>{{ trendPercent() }}% vs mes anterior</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Stats (Hoy, Gastos, Top) -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrapper blue-theme">
+          <ion-icon name="calendar-outline"></ion-icon>
+        </div>
+        <span class="stat-label">Hoy</span>
+        <span class="stat-value blue-text">{{ formatMonto(gastoHoy()) }}</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper green-theme">
+          <ion-icon name="receipt-outline"></ion-icon>
+        </div>
+        <span class="stat-label">Gastos</span>
+        <span class="stat-value green-text">{{ numGastos() }}</span>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon-wrapper orange-theme">
+          <ion-icon name="restaurant-outline"></ion-icon>
+        </div>
+        <span class="stat-label">Top</span>
+        <span class="stat-value orange-text">{{ topCategoria() }}</span>
+      </div>
+    </div>
+
+    <!-- Desglose Mensual -->
+    <div class="breakdown-section">
+      <div class="section-header">
+        <h2>Desglose por categoría</h2>
+      </div>
+
+      <div class="breakdown-list">
+        @for (cat of desgloseCategorias(); track cat.nombre) {
+          <div class="breakdown-item">
+            <div class="breakdown-header">
+              <div class="breakdown-info">
+                <div class="item-icon-container small-icon" [style.background-color]="getCategoryDetails(cat.id).bgColor">
+                  <ion-icon [name]="getCategoryDetails(cat.id).icon" 
+                            [style.color]="getCategoryDetails(cat.id).iconColor">
+                  </ion-icon>
+                </div>
+                <span class="breakdown-name">{{ cat.nombre }}</span>
+              </div>
+              <div class="breakdown-amount-wrapper">
+                <span class="breakdown-amount">{{ formatMonto(cat.total) }}</span>
+                <span class="progress-percent">{{ cat.porcentaje }}%</span>
+              </div>
+            </div>
+            <div class="progress-bar-container">
+              <div class="progress-fill" 
+                   [style.width]="cat.porcentaje + '%'" 
+                   [style.background-color]="getCategoryDetails(cat.id).iconColor || 'var(--ion-color-primary)'">
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <ion-icon name="pie-chart-outline"></ion-icon>
+            <p>No hay gastos en este mes.</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Gastos Recientes -->
+    <div class="recent-section">
+      <div class="section-header">
+        <h2>Gastos recientes</h2>
+        <a [routerLink]="['/tabs/gastos']" class="see-more-link">Ver más</a>
+      </div>
+
+      <div class="recent-list">
+        @for (gasto of recentGastos(); track gasto.id) {
+          <div class="recent-item">
+            <!-- Icono con fondo según categoría -->
+            <div class="item-icon-container" [style.background-color]="getCategoryDetails(gasto.categoria).bgColor">
+              <ion-icon [name]="getCategoryDetails(gasto.categoria).icon" 
+                        [style.color]="getCategoryDetails(gasto.categoria).iconColor">
+              </ion-icon>
+            </div>
+
+            <!-- Contenido (Concepto e Info) -->
+            <div class="item-content">
+              <span class="item-title">{{ gasto.concepto }}</span>
+              <span class="item-subtitle">{{ formatFechaHora(gasto.fecha) }}</span>
+            </div>
+
+            <!-- Monto negativo como en el diseño -->
+            <div class="item-amount negative">
+              -{{ formatMonto(gasto.monto) }}
+            </div>
+          </div>
+        } @empty {
+          <div class="empty-state">
+            <ion-icon name="cash-outline"></ion-icon>
+            <p>No tienes gastos registrados recientemente.</p>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</ion-content>
