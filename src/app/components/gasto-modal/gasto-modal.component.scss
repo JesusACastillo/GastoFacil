@@ -61,6 +61,29 @@
     }
 }
 
+.category-selector-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .custom-select-trigger {
+        flex-grow: 1;
+        width: 100%;
+    }
+
+    .add-category-btn {
+        margin: 0;
+        height: 48px;
+        --padding-start: 8px;
+        --padding-end: 8px;
+        
+        ion-icon {
+            font-size: 28px;
+            color: var(--ion-color-primary, #3b82f6);
+        }
+    }
+}
+
 ::ng-deep .floating-modal {
   .icon-grid {
     display: grid;
